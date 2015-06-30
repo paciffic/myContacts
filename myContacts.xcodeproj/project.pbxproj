@@ -13,6 +13,8 @@
 		4B00D5061B4267AE00A890D4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B00D5051B4267AE00A890D4 /* Images.xcassets */; };
 		4B00D5091B4267AE00A890D4 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B00D5071B4267AE00A890D4 /* LaunchScreen.xib */; };
 		4B00D5151B4267AF00A890D4 /* myContactsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B00D5141B4267AF00A890D4 /* myContactsTests.swift */; };
+		4B4FA0A81B428ABF00235DCB /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B4FA0A71B428ABF00235DCB /* MainViewController.swift */; };
+		4B4FA0AA1B428AE800235DCB /* ContactDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B4FA0A91B428AE800235DCB /* ContactDetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +38,8 @@
 		4B00D50E1B4267AF00A890D4 /* myContactsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = myContactsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B00D5131B4267AF00A890D4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4B00D5141B4267AF00A890D4 /* myContactsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = myContactsTests.swift; sourceTree = "<group>"; };
+		4B4FA0A71B428ABF00235DCB /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		4B4FA0A91B428AE800235DCB /* ContactDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactDetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +84,8 @@
 				4B00D4FE1B4267AE00A890D4 /* AppDelegate.swift */,
 				4B00D5001B4267AE00A890D4 /* ViewController.swift */,
 				4B00D5021B4267AE00A890D4 /* Main.storyboard */,
+				4B4FA0A91B428AE800235DCB /* ContactDetailViewController.swift */,
+				4B4FA0A71B428ABF00235DCB /* MainViewController.swift */,
 				4B00D5051B4267AE00A890D4 /* Images.xcassets */,
 				4B00D5071B4267AE00A890D4 /* LaunchScreen.xib */,
 				4B00D4FC1B4267AE00A890D4 /* Supporting Files */,
@@ -212,7 +218,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B4FA0A81B428ABF00235DCB /* MainViewController.swift in Sources */,
 				4B00D5011B4267AE00A890D4 /* ViewController.swift in Sources */,
+				4B4FA0AA1B428AE800235DCB /* ContactDetailViewController.swift in Sources */,
 				4B00D4FF1B4267AE00A890D4 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -407,6 +415,7 @@
 				4B00D51A1B4267AF00A890D4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4B00D51B1B4267AF00A890D4 /* Build configuration list for PBXNativeTarget "myContactsTests" */ = {
 			isa = XCConfigurationList;
@@ -415,6 +424,7 @@
 				4B00D51D1B4267AF00A890D4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
