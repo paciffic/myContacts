@@ -38,6 +38,13 @@ class ContactDetailViewController: UIViewController {
     
     // authorzation 처리 함수
     func process_authorization() {
+        
+        if (self.addressBookRef != nil) {
+            println("Success of getting address")
+        } else {
+            println("Fail of getting address")
+        }
+        
         let authorizationStatus = ABAddressBookGetAuthorizationStatus()
         
         
@@ -95,5 +102,10 @@ class ContactDetailViewController: UIViewController {
         presentViewController(cantAddContactAlert, animated: true, completion: nil)
     }
     
+    func getAllContactsList() {
+        let allRecord : ABRecordRef = ABPersonCreate().takeRetainedValue()
+        
+        //println(addressBookRef.)
+    }
     
 }
