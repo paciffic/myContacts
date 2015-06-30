@@ -39,11 +39,7 @@ class ContactDetailViewController: UIViewController {
     // authorzation 처리 함수
     func process_authorization() {
         
-        if (self.addressBookRef != nil) {
-            println("Success of getting address")
-        } else {
-            println("Fail of getting address")
-        }
+
         
         let authorizationStatus = ABAddressBookGetAuthorizationStatus()
         
@@ -56,6 +52,19 @@ class ContactDetailViewController: UIViewController {
         case .Authorized:
             //2
             println("Authorized")
+            
+            ABAddressBookRequestAccessWithCompletion(addressBookRef,{success, error in
+                if success {
+                    println("success")
+                    self.getAllContactsList()
+                }
+                else
+                {
+                    println("error")
+                }
+            })
+           
+        
             //addPetToContacts(petButton)
         case .NotDetermined:
             //3
@@ -76,6 +85,7 @@ class ContactDetailViewController: UIViewController {
                     self.displayCantAddContactAlert()
                 } else {
                     println("Just authorized")
+                    self.getAllContactsList()
                     //self.addPetToContacts(petButton)
                 }
             }
@@ -105,7 +115,35 @@ class ContactDetailViewController: UIViewController {
     func getAllContactsList() {
         let allRecord : ABRecordRef = ABPersonCreate().takeRetainedValue()
         
+        var contactList: NSArray = ABAddressBookCopyArrayOfAllPeople(addressBookRef).takeRetainedValue()
+        println("records in the array \(contactList.count)") // returns 0
+        
+        for record:ABRecordRef in contactList {
+            var contactPerson: ABRecordRef = record
+            var contactName: String = ABRecordCopyCompositeName(contactPerson).takeRetainedValue() as String
+            var phones : ABMultiValueRef = ABRecordCopyValue(record,kABPersonPhoneProperty).takeUnretainedValue() as ABMultiValueRef
+            
+            for(var numberIndex : CFIndex = 0; numberIndex < ABMultiValueGetCount(phones); numberIndex++)
+            {
+                let phoneUnmaganed = ABMultiValueCopyValueAtIndex(phones, numberIndex)
+                
+                let phoneNumber : NSString = phoneUnmaganed.takeUnretainedValue() as! NSString
+                
+                let locLabel : CFStringRef = (ABMultiValueCopyLabelAtIndex(phones, numberIndex) != nil) ? ABMultiValueCopyLabelAtIndex(phones, numberIndex).takeUnretainedValue() as CFStringRef : ""
+                
+                var cfStr:CFTypeRef = locLabel
+                var nsTypeString = cfStr as! NSString
+                var swiftString:String = nsTypeString as String
+                
+                let customLabel = String (stringInterpolationSegment: ABAddressBookCopyLocalizedLabel(locLabel))
+                
+                
+                println("Name : \(contactName), NO : \(phoneNumber)" )
+           
+        }
+        
         //println(addressBookRef.)
+        }
     }
     
 }
