@@ -9,13 +9,22 @@
 import UIKit
 import AddressBook
 
-class ContactDetailViewController: UIViewController {
+class ContactDetailViewController: UITableViewController {
 
-    let addressBookRef: ABAddressBook = ABAddressBookCreateWithOptions(nil, nil).takeRetainedValue()
+    var addressBookRef: ABAddressBook = []
+    var contactList: NSArray = []
+    var contactNames: [String]!
+    var contactImages: [UIImage]!
+    
+    func initVar() {
+        addressBookRef = ABAddressBookCreateWithOptions(nil, nil).takeRetainedValue()
+        contactList = ABAddressBookCopyArrayOfAllPeople(addressBookRef).takeRetainedValue()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        initVar()
         process_authorization()
         // Do any additional setup after loading the view.
     }
@@ -38,8 +47,6 @@ class ContactDetailViewController: UIViewController {
     
     // authorzation 처리 함수
     func process_authorization() {
-        
-
         
         let authorizationStatus = ABAddressBookGetAuthorizationStatus()
         
@@ -112,11 +119,12 @@ class ContactDetailViewController: UIViewController {
         presentViewController(cantAddContactAlert, animated: true, completion: nil)
     }
     
+    // 전체 연락처 목록을 얻어오는 함수
     func getAllContactsList() {
         let allRecord : ABRecordRef = ABPersonCreate().takeRetainedValue()
         
         var contactList: NSArray = ABAddressBookCopyArrayOfAllPeople(addressBookRef).takeRetainedValue()
-        println("records in the array \(contactList.count)") // returns 0
+        //println("records in the array \(contactList.count)") // returns 0
         
         for record:ABRecordRef in contactList {
             var contactPerson: ABRecordRef = record
@@ -127,23 +135,90 @@ class ContactDetailViewController: UIViewController {
             {
                 let phoneUnmaganed = ABMultiValueCopyValueAtIndex(phones, numberIndex)
                 
-                let phoneNumber : NSString = phoneUnmaganed.takeUnretainedValue() as! NSString
+                let phoneNumber : NSString = phoneUnmaganed.takeUnretainedValue() as NSString
                 
                 let locLabel : CFStringRef = (ABMultiValueCopyLabelAtIndex(phones, numberIndex) != nil) ? ABMultiValueCopyLabelAtIndex(phones, numberIndex).takeUnretainedValue() as CFStringRef : ""
                 
                 var cfStr:CFTypeRef = locLabel
-                var nsTypeString = cfStr as! NSString
+                var nsTypeString = cfStr as NSString
                 var swiftString:String = nsTypeString as String
                 
-                let customLabel = String (stringInterpolationSegment: ABAddressBookCopyLocalizedLabel(locLabel))
+                //let customLabel = String (stringInterpolationSegment: ABAddressBookCopyLocalizedLabel(locLabel))
+                let customLabel = ABAddressBookCopyLocalizedLabel(locLabel)
                 
                 
                 println("Name : \(contactName), NO : \(phoneNumber)" )
            
         }
+
         
         //println(addressBookRef.)
         }
+    } //func getAllContactsList() End
+    
+    
+    func getContactListCount() -> Int {
+        var contactList: NSArray = ABAddressBookCopyArrayOfAllPeople(addressBookRef).takeRetainedValue()
+        println("records in the array \(contactList.count)")
+        return contactList.count  // returns count of contacList
     }
+    
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    {
+        return getContactListCount()
+    }
+    
+   override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = self.tableView.dequeueReusableCellWithIdentifier("ContactsTableCell", forIndexPath: indexPath) as ContactTableViewCell
+        let row = indexPath.row
+    
+        cell.lblContactName.font = UIFont.preferredFontForTextStyle(UIFontTextStyleHeadline)
+    
+        contactNames = Array()
+        contactImages = Array()
+    
+        for record:ABRecordRef in contactList {
+            var contactPerson: ABRecordRef = record
+            var contactName: String = ABRecordCopyCompositeName(contactPerson).takeRetainedValue() as String
+            var phones : ABMultiValueRef = ABRecordCopyValue(record,kABPersonPhoneProperty).takeUnretainedValue() as ABMultiValueRef
+            var contactImage = ABPersonCopyImageDataWithFormat(contactPerson, kABPersonImageFormatThumbnail)?
+            
+            if contactImage != nil
+            {
+                var imgTemp : NSObject? = Unmanaged<NSObject>.fromOpaque(contactImage! .toOpaque()).takeRetainedValue()
+                
+                if imgTemp != nil
+                {
+                    contactImages.append(UIImage(data: imgTemp as NSData)!)
+                }
+                else {
+                    contactImages.append(UIImage(named: "grand_canyon.jpg")!)
+                }
+            } else {
+                contactImages.append(UIImage(named: "grand_canyon.jpg")!)
+            }
+            
+            if (contactNames != nil)
+            {
+                contactNames.append(contactName)
+            }
+            else {
+                contactNames.append("")
+            }
+        }
+    
+        println("contactImages : \(contactImages.count)")
+        println("contactList.count : \(contactList.count), row : \(indexPath.row)")
+        //println("contactName : \(contactNames[indexPath.row]), contactImage : \(contactImages[indexPath.row])")
+    
+        cell.lblContactName.text = contactNames[indexPath.row]
+        cell.imvContact.image = contactImages[indexPath.row]
+        return cell
+    }
+    
     
 }
