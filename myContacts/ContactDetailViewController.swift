@@ -211,8 +211,8 @@ class ContactDetailViewController: UITableViewController {
             }
         }
     
-        println("contactImages : \(contactImages.count)")
-        println("contactList.count : \(contactList.count), row : \(indexPath.row)")
+        //println("contactImages : \(contactImages.count)")
+        //println("contactList.count : \(contactList.count), row : \(indexPath.row)")
         //println("contactName : \(contactNames[indexPath.row]), contactImage : \(contactImages[indexPath.row])")
     
         cell.lblContactName.text = contactNames[indexPath.row]
